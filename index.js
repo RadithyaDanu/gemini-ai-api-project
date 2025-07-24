@@ -40,60 +40,60 @@ const imageGenerativePart = (filePath, mimeType) => ({
 
 app.post("/generate-from-image", upload.single('image'), async (req, res) => {
   try {
-    const { prompt } = req.body; // Extract the prompt from the request body
+    const { prompt } = req.body; 
     const image = imageGenerativePart(req.file.path, 'image/png');
 
     const result = await model.generateContent([prompt, image]);
-    const response = result.response; // Get the response from the model
-    const text = response.text(); // Extract the text from the response
+    const response = result.response; 
+    const text = response.text(); 
 
-    res.status(200).json({ output: text }); // Send the generated text as a response
+    res.status(200).json({ output: text }); 
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: 'An error occurred while generating text from image.' });
   } finally {
-    fs.unlinkSync(req.file.path); // Delete the uploaded file
+    fs.unlinkSync(req.file.path);
   }
 });
 
 
-// ENDPOINT UNTUK MEMBACA DOKUMEN
+// endpoint for read document
 app.post("/generate-from-document", upload.single('document'), async (req, res) => {
   try {
     // const { prompt } = req.body; // Extract the prompt from the request body
-    const filePath = req.file.path;         // Get the path of the uploaded file
-    const mimeType = req.file.mimetype;     // Get the MIME type of the uploaded file
-    const document = imageGenerativePart(filePath, mimeType); // Prepare the document data for the model
+    const filePath = req.file.path;        
+    const mimeType = req.file.mimetype;    
+    const document = imageGenerativePart(filePath, mimeType); 
 
     const result = await model.generateContent(['Analyze this document: ', document]);
-    const response = result.response;       // Get the response from the model
-    const text = response.text();           // Extract the text from the response
+    const response = result.response;       
+    const text = response.text();           
 
-    res.status(200).json({ output: text }); // Send the generated text as a response
+    res.status(200).json({ output: text }); 
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: 'An error occurred while generating text from document.' });
   } finally {
-    fs.unlinkSync(req.file.path); // Delete the uploaded file
+    fs.unlinkSync(req.file.path); 
   }
 });
 
-// ENDPOINT UNTUK MEMBACA AUDIO
+// endpoint for read audio
 app.post('/generate-from-audio', upload.single('audio'), async (req, res) => {
   try {
     // const { prompt } = req.body; // Extract the prompt from the request body
-    const filePath = req.file.path; // Get the path of the uploaded file
-    const mimeType = req.file.mimetype; // Get the MIME type of the uploaded file
-    const audio = imageGenerativePart(filePath, mimeType); // Prepare the document data for the model
+    const filePath = req.file.path; 
+    const mimeType = req.file.mimetype; 
+    const audio = imageGenerativePart(filePath, mimeType); 
     const result = await model.generateContent(['Analyze this audio:', audio]);
     const response = result.response;
-    const text = response.text(); // Extract the text from the response
-    res.status(200).json({ output: text }); // Send the generated text as a response
+    const text = response.text(); 
+    res.status(200).json({ output: text }); 
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: 'An error occurred while generating text from audio.' });
   } finally {
-    fs.unlinkSync(req.file.path); // Delete the uploaded file
+    fs.unlinkSync(req.file.path);
   }
 });
 
